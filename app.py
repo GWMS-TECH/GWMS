@@ -53,35 +53,55 @@ background = get_background()
 def ask_ai(message, history):
 
     try:
-
         messages = [
             {
                 "role": "system",
                 "content": """
 You are FIKYA, a smart, helpful and friendly AI assistant.
 
-Your job is to help users with:
-- General questions
-- Learning
-- Technology
-- Business
-- Writing
-- Research
-- Coding
-- Everyday problems
+Your job is to help users with general questions, learning,
+technology, business, writing, research, coding and everyday problems.
 
 Give clear, useful and accurate answers.
-
-Do not pretend to know something when you do not know it.
-
-Keep answers easy to understand while still being intelligent and helpful.
 
 Your name is FIKYA.
 """
             }
         ]
 
+        # Add previous conversation
+        if history:
+            for user_message, assistant_message in history:
 
+                if user_message:
+                    messages.append({
+                        "role": "user",
+                        "content": str(user_message)
+                    })
+
+                if assistant_message:
+                    messages.append({
+                        "role": "assistant",
+                        "content": str(assistant_message)
+                    })
+
+        # Add current question
+        messages.append({
+            "role": "user",
+            "content": message
+        })
+
+        response = client.chat.completions.create(
+            model="openai/gpt-oss-20b",
+            messages=messages,
+            temperature=0.7,
+            max_tokens=1200
+        )
+
+        return response.choices[0].message.content
+
+    except Exception as error:
+        return f"Sorry, FIKYA encountered a connection problem: {str(error)}"
         # Add previous conversation
         if history:
 
