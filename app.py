@@ -294,9 +294,9 @@ with gr.Blocks(
     # Chatbot
 
     chatbot = gr.Chatbot(
-        height=560,
-        elem_id="chatbot",
-        type="messages"
+    height=560,
+    elem_id="chatbot"
+)
     )
 
 
